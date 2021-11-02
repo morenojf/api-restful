@@ -1,37 +1,35 @@
 const mongoose = require('../../../common/services/mongodb');
-const userModel = require('../models');
-// const jwt = require('jsonwebtoken')
+const postModel = require('../model');
 
+const Post = mongoose.model('Post', postModel);
 
-
-const Usuario = mongoose.model('User', userModel)
-
-const getUsers = async(req, res) => {
+const getPosts = async(req, res) => {
     try {
-        const users = await Usuario.find();
-        res.status(200).json(users)
+        const posts = await Post.find();
+        res.status(200).json(posts)
     } catch (error) {
-        return res.status(500).json({ message: error })
+        return res.status(404).json({ message: "error: something went wrong"})
     }
 }
 
-const addUser = async(req, res) => {
+const addPost = async(req, res) => {
     try {
-        const user = new Usuario(req.body)
-        await user.save()
-
-        res.status(200).json({ ok: true })
+        const post = new Post(req.body)
+        await post.save()
+        const succesfull = "Se ha publicado con éxito"
+        res.status(200).json({ ok: succesfull })
     } catch (error) {
-        return res.status(500).json({ message: error })
+        return res.status(500).json({ message: "We couldn't upload your post" })
     }
 }
+
 
 const findById = async(req, res) =>{
     try{
-        const user = await Usuario.findById(req.params.id)
-        res.status(200).json(user)
+        const post = await Post.findById(req.params.id)
+        res.status(200).json(post)
     }catch (error){
-        return res.status(500).json({message: 'error: no se ha podido encontrar el usuario'})
+        return res.status(500).json({message: "error: we are sorry, we couldn't finde the post you are looking for"})
     }
 }
 
@@ -79,15 +77,4 @@ const remove = async(req, res) => {
     }
 }
 
-// const login = async(req, res) => {
-//     try {
-//         const username = await Usuario.username;
-//         const user = {user: username}
-//         const accesToken = jwt.sign(user, process.env.MI_PEQUEÑO_SECRETO)
-//         res.status(200).json({accesToken: accesToken});
-//     } catch (error) {
-//         return res.status(500).json({ message: error })
-//     }
-// }
-module.exports = {findById, addUser, getUsers, remove, editAll, editSomeone};
-
+module.exports = {findById, addPost, getPosts, remove, editAll, editSomeone};
