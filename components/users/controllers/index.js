@@ -25,12 +25,12 @@ const addUser = async(req, res) => {
     }
 }
 
-const findById = (req, res) =>{
+const findById = async(req, res) =>{
     try{
-        const user = Usuario.findById(req.params.id)
+        const user = await Usuario.findById(req.params.id)
         res.status(200).json(user)
     }catch (error){
-        return res.status(500).json({message: error})
+        return res.status(500).json({message: 'error: no se ha podido encontrar el usuario'})
     }
 }
 
