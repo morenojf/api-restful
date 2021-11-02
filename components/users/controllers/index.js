@@ -34,5 +34,48 @@ const findById = async(req, res) =>{
     }
 }
 
-module.exports = {findById, addUser, getUsers};
+const editAll = async(req, res) => {
+    try {
+        const { body } = req;
+        const filter = { _id: mongoose.Types.ObjectId(req.params.id) };
+        const update = body;
+
+        const doc = await Usuario.findOneAndUpdate(filter, update, { new: true });
+
+        if (!doc)
+            return res.status(404).json({ message: `_id ${req.params.id} doesn't exists` })
+
+        res.status(200).json(doc)
+    } catch (error) {
+        return res.status(500).json({ message: error })
+    }
+}
+
+const editSomeone = async(req, res) => {
+    try {
+        const { body } = req;
+        const filter = { _id: mongoose.Types.ObjectId(req.params.id) };
+        const update = body;
+        delete body._id
+        const doc = await Usuario.findOneAndUpdate(filter, update, { new: true });
+
+        if (!doc)
+            return res.status(404).json({ message: `_id ${req.params.id} doesn't exists` })
+
+        res.status(200).json(doc)
+    } catch (error) {
+        return res.status(500).json({ message: error })
+    }
+}
+
+const remove = async(req, res) => {
+    try {
+        const filter = { _id: mongoose.Types.ObjectId(req.params.id) };
+        let response = await Usuario.remove(filter)
+        res.status(200).json({ OK: true, deletedCount: response.deletedCount })
+    } catch (error) {
+        return res.status(500).json({ message: error })
+    }
+}
+module.exports = {findById, addUser, getUsers, remove, editAll, editSomeone};
 
