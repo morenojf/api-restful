@@ -1,12 +1,17 @@
-const mongoose = require('mongoose')
+var mongoose = require('mongoose');
+// var uniqueValidator = require('mongoose-unique-validator');
 
-const userModel = {
-    nombre: String,
-    email: String,
-    password: String,
-    userId: String, 
-    postId: String
+var userModel = {
+  username: String,
+  email: String,
+  password: String,
 };
 
 
-module.exports = {userModel: userModel};
+module.exports = userModel;
+
+
+
+
+
+
